@@ -119,7 +119,7 @@ function App() {
 
   const sections: Sections = {
     home: {
-      title: "Hi, I'm Harsh Raj",
+      title: "Harsh Raj",
       subtitle: "Full Stack Developer",
       content: "I'm a passionate developer with expertise in building modern web applications.",
       socialLinks: {
