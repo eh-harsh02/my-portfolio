@@ -1,7 +1,20 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { SiLeetcode } from 'react-icons/si';
-import { FaMedal, FaTrophy, FaAward, FaCode } from 'react-icons/fa';
+import { FaCode, FaStar, FaTrophy, FaAward, FaMedal } from 'react-icons/fa';
+
+type Badge = {
+  name: string;
+  icon: React.ReactElement;
+  description: string;
+}
+
+type RecentActivity = {
+  date: string;
+  title: string;
+  difficulty: string;
+  icon: React.ReactElement;
+}
 
 const LeetCodeStats = () => {
   const [stats, setStats] = useState({
@@ -14,10 +27,35 @@ const LeetCodeStats = () => {
     contribution: 0
   });
 
-  const [badges, setBadges] = useState([]);
-  const [recentActivities, setRecentActivities] = useState([]);
+  const [badges, setBadges] = useState<Badge[]>([]);
+
+  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const getRecentDates = () => {
+    const dates = [];
+    const today = new Date();
+    for (let i = 0; i < 5; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() - i);
+      dates.push(formatDate(date));
+    }
+    return dates;
+  };
+
+  const handleError = (err: unknown) => {
+    const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+    setError(errorMessage);
+  };
 
   useEffect(() => {
     const fetchLeetCodeStats = async () => {
@@ -25,7 +63,6 @@ const LeetCodeStats = () => {
         setLoading(true);
         setError(null);
         
-        // Fetch the user's stats
         const response = await fetch('https://leetcode-stats-api.herokuapp.com/eh_harsh02');
         
         if (!response.ok) {
@@ -35,7 +72,7 @@ const LeetCodeStats = () => {
         const data = await response.json();
         
         if (data.status === 'success') {
-          setStats({
+          const newStats = {
             totalSolved: data.totalSolved || 0,
             easySolved: data.easySolved || 0,
             mediumSolved: data.mediumSolved || 0,
@@ -43,41 +80,77 @@ const LeetCodeStats = () => {
             acceptanceRate: Math.round((data.totalSolved / (data.totalQuestions || 1)) * 100),
             ranking: data.ranking || 0,
             contribution: data.contributionPoints || 0
-          });
+          };
+          setStats(newStats);
 
-          // Mock badges data
-          setBadges([
-            {
-              name: "50 Days Badge",
-              icon: <FaMedal />,
-              description: "Solved problems for 50 consecutive days"
-            },
-            {
-              name: "Knight Badge",
+          // Update badges based on actual stats
+          const unlockedBadges: Badge[] = [];
+          
+          if (newStats.totalSolved >= 100) {
+            unlockedBadges.push({
+              name: "Century Club",
               icon: <FaTrophy />,
-              description: "Reached Knight rank"
-            },
-            {
-              name: "100 Problems Badge",
-              icon: <FaAward />,
               description: "Solved 100+ problems"
-            }
-          ]);
+            });
+          }
+          
+          if (newStats.hardSolved >= 10) {
+            unlockedBadges.push({
+              name: "Hard Problem Solver",
+              icon: <FaMedal />,
+              description: "Solved 10+ hard problems"
+            });
+          }
+          
+          if (newStats.acceptanceRate >= 80) {
+            unlockedBadges.push({
+              name: "High Accuracy",
+              icon: <FaAward />,
+              description: "Maintained 80%+ acceptance rate"
+            });
+          }
+          
+          if (newStats.mediumSolved >= 50) {
+            unlockedBadges.push({
+              name: "Medium Master",
+              icon: <FaStar />,
+              description: "Solved 50+ medium problems"
+            });
+          }
+          
+          if (newStats.easySolved >= 50) {
+            unlockedBadges.push({
+              name: "Easy Expert",
+              icon: <FaStar />,
+              description: "Solved 50+ easy problems"
+            });
+          }
+          
+          if (newStats.contribution >= 100) {
+            unlockedBadges.push({
+              name: "Community Contributor",
+              icon: <FaAward />,
+              description: "Earned 100+ contribution points"
+            });
+          }
 
-          // Mock recent activities data
+          setBadges(unlockedBadges);
+
+          const recentDates = getRecentDates();
+          // Mock recent activities data with current dates
           const mockActivities = [
-            { date: "2024-03-15", title: "Solved Two Sum", difficulty: "Easy", icon: <FaCode /> },
-            { date: "2024-03-14", title: "Solved Add Two Numbers", difficulty: "Medium", icon: <FaCode /> },
-            { date: "2024-03-13", title: "Solved Longest Substring Without Repeating Characters", difficulty: "Medium", icon: <FaCode /> },
-            { date: "2024-03-12", title: "Solved Median of Two Sorted Arrays", difficulty: "Hard", icon: <FaCode /> },
-            { date: "2024-03-11", title: "Solved Container With Most Water", difficulty: "Medium", icon: <FaCode /> }
+            { date: recentDates[0], title: "Solved Two Sum", difficulty: "Easy", icon: <FaCode /> },
+            { date: recentDates[1], title: "Solved Add Two Numbers", difficulty: "Medium", icon: <FaCode /> },
+            { date: recentDates[2], title: "Solved Longest Substring Without Repeating Characters", difficulty: "Medium", icon: <FaCode /> },
+            { date: recentDates[3], title: "Solved Median of Two Sorted Arrays", difficulty: "Hard", icon: <FaCode /> },
+            { date: recentDates[4], title: "Solved Container With Most Water", difficulty: "Medium", icon: <FaCode /> }
           ];
           setRecentActivities(mockActivities);
         } else {
           throw new Error(data.message || 'Failed to fetch LeetCode stats');
         }
       } catch (err) {
-        setError(err.message || 'Failed to load LeetCode stats. Please try again later.');
+        handleError(err);
         console.error('Error fetching LeetCode stats:', err);
       } finally {
         setLoading(false);
@@ -240,18 +313,22 @@ const LeetCodeStats = () => {
       >
         <h4>Achievements</h4>
         <div className="badges-grid">
-          {badges.map((badge, index) => (
-            <motion.div 
-              key={index}
-              className="badge-card"
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="badge-icon">{badge.icon}</div>
-              <h5>{badge.name}</h5>
-              <p>{badge.description}</p>
-            </motion.div>
-          ))}
+          {badges.length > 0 ? (
+            badges.map((badge, index) => (
+              <motion.div 
+                key={index}
+                className="badge-card"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="badge-icon">{badge.icon}</div>
+                <h5>{badge.name}</h5>
+                <p>{badge.description}</p>
+              </motion.div>
+            ))
+          ) : (
+            <p className="no-badges">Keep solving problems to unlock achievements!</p>
+          )}
         </div>
       </motion.div>
     </motion.div>

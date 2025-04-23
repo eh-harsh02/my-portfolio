@@ -7,18 +7,98 @@ import profileImage from './assets/profile.jpg'
 import projectsData from './data/projects.json'
 import newsJunctionImage from './assets/newsjunction.png'
 import hotelManagementImage from './assets/hotel-management.jpg'
-import nptelLogo from './assets/nptel.jpg'
-import { FaGithub, FaLinkedin, FaStar, FaCertificate, FaDownload, FaExternalLinkAlt, FaMoon, FaSun, FaCode, FaNetworkWired, FaPython, FaShieldAlt, FaPuzzlePiece } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaStar, FaDownload, FaExternalLinkAlt, FaMoon, FaSun, FaNetworkWired, FaPython, FaShieldAlt, FaPuzzlePiece } from 'react-icons/fa'
 import { SiLeetcode, SiHackerrank, SiGoogle } from 'react-icons/si'
-import LeetCodeStats from './components/LeetCodeStats'
-import HackerRankBadges from './components/HackerRankBadges'
-import Particles from './components/Particles'
+import LeetCodeStats from './components/LeetCodeStats.tsx'
+import HackerRankStats from './components/HackerRankStats.tsx'
+import './styles/HackerRankStats.css'
+import Particles from './components/Particles.tsx'
+
+type Project = {
+  id: number;
+  title: string;
+  description: string;
+  technologies: string[];
+  features: string[];
+  image: string;
+  github: string;
+  liveDemo: string;
+  date: string;
+}
+
+type SocialLinks = {
+  github: string;
+  linkedin: string;
+  leetcode: string;
+  hackerrank: string;
+}
+
+type HomeSection = {
+  title: string;
+  subtitle: string;
+  content: string;
+  socialLinks: SocialLinks;
+  resumeLink: string;
+}
+
+type AboutSection = {
+  title: string;
+  content: string;
+  skills: Record<string, string[]>;
+}
+
+type AchievementsSection = {
+  title: string;
+  content: React.ReactNode;
+  icon?: React.ReactNode;
+}
+
+type CertificationsSection = {
+  title: string;
+  items: Array<{
+    name: string;
+    issuer: string;
+    link: string | null;
+    icon: React.ReactNode;
+    issuerIcon?: React.ReactNode;
+  }>;
+}
+
+type ProjectsSection = {
+  title: string;
+  content: Project[];
+}
+
+type ContactSection = {
+  title: string;
+  content: React.ReactNode;
+  email: string;
+  phone: string;
+  linkedin: string;
+  github: string;
+}
+
+type Sections = {
+  home: HomeSection;
+  about: AboutSection;
+  achievements: AchievementsSection;
+  certifications: CertificationsSection;
+  projects: ProjectsSection;
+  contact: ContactSection;
+  [key: string]: HomeSection | AboutSection | AchievementsSection | CertificationsSection | ProjectsSection | ContactSection;
+}
 
 function App() {
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme')
     return savedTheme || 'light'
   })
+
+  const itemVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 }
+  }
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
@@ -37,45 +117,18 @@ function App() {
     })
   }, [])
 
-  const pageVariants = {
-    initial: {
-      opacity: 0,
-      y: 20
-    },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        staggerChildren: 0.1
-      }
-    },
-    exit: {
-      opacity: 0,
-      y: -20,
-      transition: {
-        duration: 0.5
-      }
-    }
-  }
-
-  const itemVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 }
-  }
-
-  const sections = {
+  const sections: Sections = {
     home: {
-      title: "Harsh Raj",
+      title: "Hi, I'm Harsh Raj",
       subtitle: "Full Stack Developer",
-      content: "A passionate developer with expertise in Java, Python, JavaScript, and modern web technologies. Currently pursuing B.Tech in Computer Science and Engineering at Lovely Professional University.",
+      content: "I'm a passionate developer with expertise in building modern web applications.",
       socialLinks: {
         github: "https://github.com/eh-harsh02",
-        linkedin: "https://www.linkedin.com/in/-harsh-raj-/",
-        leetcode: "https://leetcode.com/u/eh_harsh02/",
-        hackerrank: "https://www.hackerrank.com/profile/eh_harsh02"
+        linkedin: "https://www.linkedin.com/in/harsh-raj-a2b6b4227/",
+        leetcode: "https://leetcode.com/harsh_raj02/",
+        hackerrank: "https://www.hackerrank.com/profile/harsh_raj02"
       },
-      resumeLink: "http://tiny.cc/harsh-resume"
+      resumeLink: "https://drive.google.com/file/d/1-2Q3Q4R5T6Y7U8I9O0P1A2B3C4D5E6F7/view"
     },
     about: {
       title: "About Me",
@@ -93,7 +146,7 @@ function App() {
       content: (
         <div className="achievements-content">
           <LeetCodeStats />
-          <HackerRankBadges />
+          <HackerRankStats />
         </div>
       )
     },

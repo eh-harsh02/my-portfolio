@@ -1,39 +1,57 @@
-import { useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
+
+type Particle = {
+  x: number;
+  y: number;
+  size: number;
+  speedX: number;
+  speedY: number;
+  opacity: number;
+};
+
+type MousePosition = {
+  x: number;
+  y: number;
+};
 
 const Particles = () => {
-  const canvasRef = useRef(null);
-  const particles = useRef([]);
-  const mousePosition = useRef({ x: 0, y: 0 });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particles = useRef<Particle[]>([]);
+  const mousePosition = useRef<MousePosition>({ x: 0, y: 0 });
+  const animationFrameId = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    let animationFrameId;
+    if (!canvas) return;
 
-    // Set canvas size
-    const resizeCanvas = () => {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const handleResize = () => {
+      if (!canvas) return;
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
+      initParticles();
     };
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
 
-    // Create particles
-    const createParticles = () => {
+    const initParticles = () => {
+      if (!canvas) return;
       const particleCount = Math.floor((canvas.width * canvas.height) / 10000);
       particles.current = Array.from({ length: particleCount }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
         size: Math.random() * 2 + 1,
-        speedX: Math.random() * 2 - 1,
-        speedY: Math.random() * 2 - 1,
-        opacity: Math.random() * 0.5 + 0.1,
+        speedX: (Math.random() - 0.5) * 2,
+        speedY: (Math.random() - 0.5) * 2,
+        opacity: Math.random()
       }));
     };
 
-    // Update particles
     const updateParticles = () => {
+      if (!canvas || !ctx) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       particles.current.forEach(particle => {
         particle.x += particle.speedX;
         particle.y += particle.speedY;
@@ -49,50 +67,39 @@ const Particles = () => {
         
         if (distance < 100) {
           const angle = Math.atan2(dy, dx);
-          const force = (100 - distance) / 50;
+          const force = (100 - distance) / 100;
           particle.x += Math.cos(angle) * force;
           particle.y += Math.sin(angle) * force;
         }
-      });
-    };
 
-    // Draw particles
-    const drawParticles = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.current.forEach(particle => {
+        // Draw particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(100, 255, 218, ${particle.opacity})`;
+        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
         ctx.fill();
       });
+
+      animationFrameId.current = requestAnimationFrame(updateParticles);
     };
 
-    // Animation loop
-    const animate = () => {
-      updateParticles();
-      drawParticles();
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    // Mouse move handler
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       mousePosition.current = {
         x: e.clientX,
         y: e.clientY
       };
     };
 
-    // Initialize
-    createParticles();
-    animate();
+    window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
+    handleResize();
+    updateParticles();
 
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
     };
   }, []);
 
