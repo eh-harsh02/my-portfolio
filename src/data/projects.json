@@ -1,0 +1,36 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "NewsJunction",
+      "description": "A modern news aggregator application that provides real-time news updates from various sources.",
+      "technologies": ["React", "Node.js", "MongoDB", "Express"],
+      "features": [
+        "Real-time news updates from multiple sources",
+        "User authentication and personalized news feed",
+        "News categorization and search functionality",
+        "Responsive design for all devices"
+      ],
+      "image": "newsjunction.png",
+      "github": "https://github.com/eh-harsh02/Revolutionizing-News-NewsJunction-",
+      "liveDemo": "https://newsjunction.com",
+      "date": "March 2024"
+    },
+    {
+      "id": 2,
+      "title": "Hotel Management System",
+      "description": "A comprehensive hotel management system with room booking, food ordering, and customer management features.",
+      "technologies": ["Java", "OOP", "File Handling"],
+      "features": [
+        "Room booking and management",
+        "Food ordering system",
+        "Customer information storage",
+        "Room availability tracking"
+      ],
+      "image": "hotel-management.jpg",
+      "github": "https://github.com/eh-harsh02/hotel-management-system",
+      "liveDemo": "https://hotel-management-system.com",
+      "date": "February 2024"
+    }
+  ]
+} 
