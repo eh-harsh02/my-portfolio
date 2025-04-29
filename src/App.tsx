@@ -121,12 +121,12 @@ function App() {
     home: {
       title: "Harsh Raj",
       subtitle: "Full Stack Developer",
-      content: "I'm a passionate developer with expertise in building modern web applications.",
+      content: "I am a passionate developer with expertise in building modern web applications.",
       socialLinks: {
         github: "https://github.com/eh-harsh02",
-        linkedin: "https://www.linkedin.com/in/harsh-raj-a2b6b4227/",
-        leetcode: "https://leetcode.com/harsh_raj02/",
-        hackerrank: "https://www.hackerrank.com/profile/harsh_raj02"
+        linkedin: "https://www.linkedin.com/in/-harsh-raj-/",
+        leetcode: "https://leetcode.com/u/eh_harsh02/",
+        hackerrank: "https://www.hackerrank.com/profile/eh_harsh02"
       },
       resumeLink: "https://drive.google.com/file/d/1-2Q3Q4R5T6Y7U8I9O0P1A2B3C4D5E6F7/view"
     },
