@@ -1,7 +1,30 @@
 {
   "projects": [
-    {
+          {
       "id": 1,
+      "title": "EduNirmaan – AI-Powered Learning Assistant",
+      "description": "EduNirmaan is a web application that supports rural learners with career guidance, quizzes, doubt resolution, and scholarships using AI-powered tools.",
+      "technologies": [
+        "React",
+        "Tailwind CSS",
+        "React Router DOM",
+        "Node.js",
+        "Express.js"
+      ],
+      "features": [
+      "Career Quiz and Learning Module with structured study resources",
+      "Ask Doubt & Get Help section powered by AI APIs",
+      "Scholarship information portal with eligibility filters",
+      "Conversational assistant with fully responsive UI using Tailwind CSS & DaisyUI"
+      ],
+      "image": "edunirmaan.png",
+      "github": "https://github.com/your-username/edunirmaan",
+      "liveDemo": "https://edunirmaan.netlify.app/",
+      "date": "September 2025"
+    },
+
+    {
+      "id": 2,
       "title": "NewsJunction",
       "description": "A modern news aggregator application that provides real-time news updates from various sources.",
       "technologies": ["React", "Node.js", "MongoDB", "Express"],
@@ -17,7 +40,7 @@
       "date": "March 2024"
     },
     {
-      "id": 2,
+      "id": 3,
       "title": "Hotel Management System",
       "description": "A comprehensive hotel management system with room booking, food ordering, and customer management features.",
       "technologies": ["Java", "OOP", "File Handling"],

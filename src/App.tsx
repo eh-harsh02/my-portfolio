@@ -7,6 +7,7 @@ import profileImage from './assets/profile.jpg'
 import projectsData from './data/projects.json'
 import newsJunctionImage from './assets/newsjunction.png'
 import hotelManagementImage from './assets/hotel-management.jpg'
+import edunirmaanImage from './assets/edunirmaan.png'
 import { FaGithub, FaLinkedin, FaStar, FaDownload, FaExternalLinkAlt, FaMoon, FaSun, FaNetworkWired, FaPython, FaShieldAlt, FaPuzzlePiece } from 'react-icons/fa'
 import { SiLeetcode, SiHackerrank, SiGoogle } from 'react-icons/si'
 import LeetCodeStats from './components/LeetCodeStats.tsx'
@@ -120,7 +121,7 @@ function App() {
   const sections: Sections = {
     home: {
       title: "Harsh Raj",
-      subtitle: "Full Stack Developer",
+      subtitle: "Software Developer",
       content: "I am a passionate developer with expertise in building modern web applications.",
       socialLinks: {
         github: "https://github.com/eh-harsh02",
@@ -422,20 +423,28 @@ function App() {
                 >
                   <motion.div className="project-image" variants={itemVariants}>
                     {project.id === 1 ? (
-                      <motion.img 
-                        src={newsJunctionImage} 
-                        alt={project.title}
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    ) : (
-                      <motion.img 
-                        src={hotelManagementImage} 
-                        alt={project.title}
-                        whileHover={{ scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
-                      />
-                    )}
+                    <motion.img 
+                      src={edunirmaanImage} 
+                      alt={project.title}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  ) : project.id === 2 ? (
+                    <motion.img 
+                      src={newsJunctionImage} 
+                      alt={project.title}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  ) : (
+                    <motion.img 
+                      src={hotelManagementImage} 
+                      alt={project.title}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
+
                   </motion.div>
                   <motion.h3 variants={itemVariants}>{project.title}</motion.h3>
                   <motion.p variants={itemVariants}>{project.description}</motion.p>
